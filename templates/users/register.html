@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Запись на приём — МедиКлиника</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+</head>
+<body>
+
+<!-- ── НАВИГАЦИЯ ── -->
+<nav>
+  <a class="logo" href="{% url 'home' %}" style="text-decoration:none">Меди<span>Клиника</span></a>
+  <ul class="nav-links">
+    <li><a href="{% url 'home' %}">← Главная</a></li>
+  </ul>
+</nav>
+
+<!-- ── СТРАНИЦА РЕГИСТРАЦИИ ── -->
+<div class="register-page">
+  <div class="register-card">
+
+    {% if form_success %}
+      <div class="success-msg" style="display:block">
+        <div class="check">✅</div>
+        <h4>Запись подтверждена!</h4>
+        <p>Мы позвоним вам для уточнения деталей.<br>Спасибо, что выбрали МедиКлинику.</p>
+        <a class="btn-primary" href="{% url 'home' %}" style="margin-top:1.5rem">
+          <span>На главную</span>
+        </a>
+      </div>
+
+    {% else %}
+      <h3>Записаться на приём</h3>
+      <p>Заполните форму — администратор свяжется с вами в течение 15 минут.</p>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+              <ul class="errorlist">
+                {% for error in form.first_name.errors %}<li>{{ error }}</li>{% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}
+              <ul class="errorlist">
+                {% for error in form.last_name.errors %}<li>{{ error }}</li>{% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+              <ul class="errorlist">
+                {% for error in form.phone.errors %}<li>{{ error }}</li>{% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label>{{ form.gender.label }}</label>
+            {{ form.gender }}
+            {% if form.gender.errors %}
+              <ul class="errorlist">
+                {% for error in form.gender.errors %}<li>{{ error }}</li>{% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+
+        <button type="submit" class="form-submit">Подтвердить запись</button>
+      </form>
+    {% endif %}
+
+  </div>
+</div>
+
+</body>
+</html>
